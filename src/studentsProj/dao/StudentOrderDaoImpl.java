@@ -12,14 +12,23 @@ import java.time.LocalDateTime;
 
 public class StudentOrderDaoImpl implements StudentOrderDao {
     private static final String INSERT_ORDER =
-            "INSERT INTO public.jc_student_order(\n" +
-                    "\tstudent_order_status, student_order_date, h_sur_name, h_given_name, h_patronymic, " +
-                    "h_date_of_birth, h_passport_seria, h_passport_number, h_passport_date, h_passport_office_id, " +
-                    "h_post_index, h_street_code, h_building, h_extension, h_apartment, w_sur_name, w_given_name, " +
-                    "w_patronymic, w_date_of_birth, w_passport_seria, w_passport_number, w_passport_date, " +
-                    "w_passport_office_id, w_post_index, w_street_code, w_building, w_extension, w_apartment, " +
-                    "certificate_id, register_office_id, marriage_date)\n" +
-                    "\tVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+            "INSERT INTO jc_student_order(" +
+                    " student_order_status, student_order_date, h_sur_name, " +
+                    " h_given_name, h_patronymic, h_date_of_birth, h_passport_seria, " +
+                    " h_passport_number, h_passport_date, h_passport_office_id, h_post_index, " +
+                    " h_street_code, h_building, h_extension, h_apartment, w_sur_name, " +
+                    " w_given_name, w_patronymic, w_date_of_birth, w_passport_seria, " +
+                    " w_passport_number, w_passport_date, w_passport_office_id, w_post_index, " +
+                    " w_street_code, w_building, w_extension, w_apartment, " +
+                    "certificate_id, register_office_id, marriage_date)" +
+                    " VALUES (?, ?, ?, " +
+                    " ?, ?, ?, ?, " +
+                    " ?, ?, ?, ?, " +
+                    " ?, ?, ?, ?, ?, " +
+                    " ?, ?, ?, ?, " +
+                    " ?, ?, ?, ?, " +
+                    " ?, ?, ?, ?, ?, " +
+                    "?, ?);";
 
     //    TODO refactoring - make one method
     private Connection getConnection() throws SQLException {
@@ -32,9 +41,12 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
 
     @Override
     public Long saveStudentOrder(StudentOrder so) throws DaoException {
-        try (Connection con = getConnection();
-             PreparedStatement stmt = con.prepareStatement(INSERT_ORDER)) {
+        long result = -1L;
 
+
+        try (Connection con = getConnection();
+             PreparedStatement stmt = con.prepareStatement(INSERT_ORDER, new String[]{"student_order_id"})) {
+            // Header
             stmt.setInt(1, StudentOrderStatus.START.ordinal());
             stmt.setTimestamp(2, java.sql.Timestamp.valueOf(LocalDateTime.now()));
             // Husband
@@ -76,10 +88,16 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
 
             stmt.executeUpdate();
 
+            ResultSet genKeysResultSet = stmt.getGeneratedKeys();
+            if (genKeysResultSet.next()) {
+                result = genKeysResultSet.getLong(1);
+            }
+            genKeysResultSet.close();
+
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }
 
-        return 0L;
+        return result;
     }
 }

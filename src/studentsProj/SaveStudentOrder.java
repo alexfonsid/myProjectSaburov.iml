@@ -63,8 +63,8 @@ public class SaveStudentOrder
 //        }
         StudentOrder s = buildStudentOrder(10);
         StudentOrderDao dao = new StudentOrderDaoImpl();
-        dao.saveStudentOrder(s);
-
+        Long id = dao.saveStudentOrder(s);
+        System.out.println(id);
 //        buildStudentOrder(10);
 //        StudentOrder so;
 //        so = new StudentOrder();
