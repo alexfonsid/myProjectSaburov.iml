@@ -10,7 +10,7 @@ import studentsProj.exception.DaoException;
 import java.sql.*;
 import java.time.LocalDateTime;
 
-public class StudentDaoImpl implements StudentOrderDao {
+public class StudentOrderDaoImpl implements StudentOrderDao {
     private static final String INSERT_ORDER =
             "INSERT INTO public.jc_student_order(\n" +
                     "\tstudent_order_status, student_order_date, h_sur_name, h_given_name, h_patronymic, " +
@@ -73,11 +73,13 @@ public class StudentDaoImpl implements StudentOrderDao {
             stmt.setString(29, so.getMarriageCertificateId());// certificate_id, " +
             stmt.setLong(30, so.getMarriageOffice().getOfficeId());//                    "register_office_id, " +
             stmt.setDate(31, java.sql.Date.valueOf(so.getMarriageDate()));//                    "marriage_date
+
             stmt.executeUpdate();
 
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }
+
         return 0L;
     }
 }
