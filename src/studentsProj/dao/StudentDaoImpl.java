@@ -36,10 +36,7 @@ public class StudentDaoImpl implements StudentOrderDao {
              PreparedStatement stmt = con.prepareStatement(INSERT_ORDER)) {
 
             stmt.setInt(1, StudentOrderStatus.START.ordinal());
-            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(
-                    LocalDateTime.now()
-                    //so.getStudentOrderDate()
-            ));
+            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(LocalDateTime.now()));
             // Husband
             Adult husband = so.getHusband();
             stmt.setString(3, husband.getSurName());
