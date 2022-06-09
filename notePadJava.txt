@@ -1,0 +1,16 @@
+ Class.forName("org.postgresql.Driver");
+       Connection con = DriverManager.getConnection(
+                "jdbc:postgresql://localhost:5432/myDB",
+                "postgres", "54325432Sa?@"
+       );
+
+       Statement stmt = con.createStatement();
+       ResultSet rs = stmt.executeQuery("SELECT * FROM js_street");
+       while (rs.next()) {
+           System.out.println(rs.getLong(1) + " : " + rs.getString(2));
+       }
+
+       //        List<StudentOrder> soList = dao.getStudentOrders();
+       //        for(StudentOrder so : soList) {
+       //            System.out.println(so.getStudentOrderId());
+       //        }
